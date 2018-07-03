@@ -1,5 +1,1 @@
-import plugins
-
-VERSION = '0.8.1'
-
-plugins.install_plugins()
+VERSION = '0.10.1'

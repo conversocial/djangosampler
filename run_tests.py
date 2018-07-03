@@ -12,7 +12,7 @@ def setup_test_environment():
     settings.configure(**{
         "DATABASES": {
             "default": {
-                "ENGINE": "sqlite3",
+                "ENGINE": "django.db.backends.sqlite3",
             },
         },
         "INSTALLED_APPS": ("djangosampler", ),

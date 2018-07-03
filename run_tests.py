@@ -3,6 +3,7 @@ import optparse
 import os
 import sys
 
+import django
 from django.conf import settings
 from django.core.management import call_command
 
@@ -15,9 +16,9 @@ def setup_test_environment():
                 "ENGINE": "django.db.backends.sqlite3",
             },
         },
-        "INSTALLED_APPS": ("djangosampler", ),
+        "INSTALLED_APPS": ("djangosampler.apps.DjangoSamplerConfig", ),
     })
-
+    django.setup()
 
 def main():
     

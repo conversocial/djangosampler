@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+
 from django.conf.urls import patterns, url
 
-import views
+from . import views
+
 
 urlpatterns = patterns('',
     url(r'^queries/(?P<query_type>[\w ]+)/(?P<date_string>[-\w\d]+)/(?P<sort>(-|\w)+)/(?P<offset>\d+)/$', views.queries, name='queries'),

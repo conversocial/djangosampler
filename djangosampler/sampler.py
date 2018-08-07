@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from datetime import datetime
 from time import time
 import json
@@ -9,7 +11,7 @@ from django.db.models import F
 from django.db.utils import DatabaseError
 from django.utils.encoding import force_unicode
 
-from models import Query, Sample, Stack
+from .models import Query, Sample, Stack
 
 USE_COST = getattr(settings, 'DJANGO_SAMPLER_USE_COST', False)
 FREQ = float(getattr(settings, 'DJANGO_SAMPLER_FREQ', 0))

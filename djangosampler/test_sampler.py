@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+
 from time import sleep
 
 from django.conf import settings
 from django.test import TestCase
 
-import sampler
-import models
+from . import sampler
+from . import models
 
 class TestSampler(TestCase):
     def test_calculate_cost(self):

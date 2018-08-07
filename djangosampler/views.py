@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from datetime import datetime, timedelta
 from math import ceil
 
@@ -7,8 +9,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from models import Query, Sample, Stack
-from plugins import get_view_addons
+from .models import Query, Sample, Stack
+from .plugins import get_view_addons
 
 PAGE_SIZE = 20
 

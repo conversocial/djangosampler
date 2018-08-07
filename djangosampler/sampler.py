@@ -9,7 +9,7 @@ import traceback
 from django.conf import settings
 from django.db.models import F
 from django.db.utils import DatabaseError
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 
 from .models import Query, Sample, Stack
 
@@ -48,7 +48,7 @@ def _calculate_cost(time):
 
 def _json_params(params):
     try:
-        return json.dumps([force_unicode(x) for x in params])
+        return json.dumps([force_text(x) for x in params])
     except TypeError:
         return ''
 

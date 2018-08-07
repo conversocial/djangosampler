@@ -141,6 +141,7 @@ def sample(query_type, query, time, params):
             total_cost=F('total_cost') + cost,
             count=F('count') + 1)
 
+
 class sampling:
     def __init__(self, sample_type, sample_key, params=()):
         self.sample_type = sample_type

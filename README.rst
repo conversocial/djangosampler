@@ -48,6 +48,11 @@ Configure:
    the expected duration of a normal query in seconds. By default this is set
    to 5ms.
 
+Tests
+=====
+- Ensure you have ``tox`` installed (``pip install tox``)
+- Run ``tox``
+
 
 Viewing Results
 ===============

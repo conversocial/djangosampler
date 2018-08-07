@@ -30,17 +30,17 @@
         <th>Query</th>
     </tr>
     {% for query in queries %}
-        <tr class="{% cycle 'odd' 'even' %}">
+        <tr class="{{ loop.cycle('odd', 'even') }}">
             <td class="chooser"><a href={{ query.url }}>&#x0398;</a></td>
             <td>{{ query.count }}</td>
-            <td>{{ query.total_duration|floatformat:4 }}</td>
+            <td>{{ query.total_duration|floatformat(4) }}</td>
             <td>{{ query.total_cost }}</td>
-            <td>{{ query.query|truncatechars:2048 }}</td>
+            <td>{{ query.query|truncatechars(2048) }}</td>
         </tr>
     {% endfor %}
 </table>
 <div id="page-selector">
-    Page: 
+    Page:
     {% for page in pages %}
         {% if page.number == current_page %}
             {{ page.number }}

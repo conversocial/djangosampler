@@ -1,9 +1,11 @@
 from __future__ import absolute_import
 
 from time import sleep
-from mock import patch, Mock
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
 
-from django.conf import settings
 from django.test import TestCase
 from django.db.utils import DatabaseError
 

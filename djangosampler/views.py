@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 
 from datetime import datetime, timedelta
 from math import ceil
@@ -36,7 +37,7 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
 
     current_page = 1 + start_offset / PAGE_SIZE
     max_pages = int(ceil(total_queries / float(PAGE_SIZE)))
-    pages = xrange(max(1, current_page - 5), 1 + min(max_pages, current_page + 5))
+    pages = range(max(1, current_page - 5), 1 + min(max_pages, current_page + 5))
 
     pages = list([{ 
             'number': page, 
@@ -101,7 +102,7 @@ def query(request, query_hash):
 
     recent_queries = []
     start_date = query.created_dt.date()
-    for day in xrange(-7, 7):
+    for day in range(-7, 7):
         recent_date = start_date + timedelta(days=day)
         recent_query_hash = query.get_hash_for_date(recent_date)
         try:
@@ -160,7 +161,7 @@ def _get_query_types(date_string):
 def _get_date_links(current_date, query_type):
     # Want full week before and after the current date
     date_links = []
-    for day in xrange(-7, 8):
+    for day in range(-7, 8):
         date_value = current_date + timedelta(days=day)
         date_link = {}
         date_link['friendly_name'] = date_value.strftime('%Y-%m-%d')

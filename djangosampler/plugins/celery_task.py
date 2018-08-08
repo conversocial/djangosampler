@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from time import time
 
 from celery.signals import task_prerun, task_postrun

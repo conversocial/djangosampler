@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from datetime import datetime
 
 from django.db import models
@@ -43,8 +45,8 @@ class Stack(models.Model):
     def last_stack_line(self):
         return self.stack.split('\n')[-1]
 
-    def __unicode__(self):
-        return self.hash
+    def __str__(self):
+        return str(self.hash)
 
 
 class Sample(models.Model):
@@ -62,6 +64,6 @@ class Sample(models.Model):
     def duration_ms(self):
         return self.duration * 1000.0
 
-    def __unicode__(self):
-        return unicode(self.created_dt)
+    def __str__(self):
+        return str(self.created_dt)
 

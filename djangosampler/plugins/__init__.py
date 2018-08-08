@@ -1,4 +1,6 @@
 # Plugin detection and installation module
+from __future__ import absolute_import
+
 import sys
 
 from django.conf import settings

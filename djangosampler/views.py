@@ -1,8 +1,8 @@
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division
 
 from datetime import datetime, timedelta
 from math import ceil
+from six import moves
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
@@ -37,14 +37,15 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
 
     current_page = 1 + start_offset / PAGE_SIZE
     max_pages = int(ceil(total_queries / float(PAGE_SIZE)))
-    pages = range(max(1, current_page - 5), 1 + min(max_pages, current_page + 5))
+    pages = moves.range(
+        max(1, current_page - 5), 1 + min(max_pages, current_page + 5))
 
-    pages = list([{ 
-            'number': page, 
+    pages = list([{
+            'number': page,
             'url': reverse('queries', kwargs={
                 'date_string': date_string,
                 'query_type': query_type,
-                'offset': PAGE_SIZE * (page - 1), 
+                'offset': PAGE_SIZE * (page - 1),
                 'sort': sort
             })
         }

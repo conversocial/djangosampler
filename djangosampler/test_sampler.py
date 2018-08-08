@@ -15,10 +15,12 @@ from . import models
 
 class TestCalculateCost(TestCase):
 
+    @patch('djangosampler.sampler.USE_COST', False)
     def test_use_cost_false_returns_zero(self):
         self.assertEquals(0.0, sampler._calculate_cost(1))
 
     @patch('djangosampler.sampler.USE_COST', True)
+    @patch('djangosampler.sampler.FREQ', 0)
     def test_use_cost_true_freq_zero(self):
         self.assertEquals(0.005, sampler._calculate_cost(1))
 

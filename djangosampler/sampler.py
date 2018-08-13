@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import division
+
 from datetime import datetime
 from time import time
 import json
@@ -7,9 +10,9 @@ import traceback
 from django.conf import settings
 from django.db.models import F
 from django.db.utils import DatabaseError
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 
-from models import Query, Sample, Stack
+from .models import Query, Sample, Stack
 
 USE_COST = getattr(settings, 'DJANGO_SAMPLER_USE_COST', False)
 FREQ = float(getattr(settings, 'DJANGO_SAMPLER_FREQ', 0))
@@ -46,7 +49,7 @@ def _calculate_cost(time):
 
 def _json_params(params):
     try:
-        return json.dumps([force_unicode(x) for x in params])
+        return json.dumps([force_text(x) for x in params])
     except TypeError:
         return ''
 
@@ -138,6 +141,7 @@ def sample(query_type, query, time, params):
             total_duration=F('total_duration') + time,
             total_cost=F('total_cost') + cost,
             count=F('count') + 1)
+
 
 class sampling:
     def __init__(self, sample_type, sample_key, params=()):

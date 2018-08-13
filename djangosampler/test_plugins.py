@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 from django.conf import settings
 from django.test import TestCase
 
-from plugins import install_plugins
+from .plugins import install_plugins
 
 class DummyPlugin(object):
     @staticmethod

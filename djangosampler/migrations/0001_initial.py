@@ -1,89 +1,57 @@
-# encoding: utf-8
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
+from django.db import migrations, models
 import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
-
-class Migration(SchemaMigration):
-
-    def forwards(self, orm):
-        
-        # Adding model 'Query'
-        db.create_table('djangosampler_query', (
-            ('hash', self.gf('django.db.models.fields.CharField')(max_length=32, primary_key=True)),
-            ('query', self.gf('django.db.models.fields.TextField')()),
-            ('total_duration', self.gf('django.db.models.fields.FloatField')(default=0)),
-            ('total_cost', self.gf('django.db.models.fields.FloatField')(default=0)),
-            ('count', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('query_type', self.gf('django.db.models.fields.CharField')(max_length=32, db_index=True)),
-        ))
-        db.send_create_signal('djangosampler', ['Query'])
-
-        # Adding model 'Stack'
-        db.create_table('djangosampler_stack', (
-            ('hash', self.gf('django.db.models.fields.CharField')(max_length=32, primary_key=True)),
-            ('stack', self.gf('django.db.models.fields.TextField')()),
-            ('total_duration', self.gf('django.db.models.fields.FloatField')(default=0)),
-            ('total_cost', self.gf('django.db.models.fields.FloatField')(default=0)),
-            ('count', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('query', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['djangosampler.Query'])),
-        ))
-        db.send_create_signal('djangosampler', ['Stack'])
-
-        # Adding model 'Sample'
-        db.create_table('djangosampler_sample', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('query', self.gf('django.db.models.fields.TextField')()),
-            ('duration', self.gf('django.db.models.fields.FloatField')()),
-            ('cost', self.gf('django.db.models.fields.FloatField')()),
-            ('stack', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['djangosampler.Stack'])),
-            ('params', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('djangosampler', ['Sample'])
 
 
-    def backwards(self, orm):
-        
-        # Deleting model 'Query'
-        db.delete_table('djangosampler_query')
+class Migration(migrations.Migration):
 
-        # Deleting model 'Stack'
-        db.delete_table('djangosampler_stack')
+    dependencies = [
+    ]
 
-        # Deleting model 'Sample'
-        db.delete_table('djangosampler_sample')
-
-
-    models = {
-        'djangosampler.query': {
-            'Meta': {'object_name': 'Query'},
-            'count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'hash': ('django.db.models.fields.CharField', [], {'max_length': '32', 'primary_key': 'True'}),
-            'query': ('django.db.models.fields.TextField', [], {}),
-            'query_type': ('django.db.models.fields.CharField', [], {'max_length': '32', 'db_index': 'True'}),
-            'total_cost': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'total_duration': ('django.db.models.fields.FloatField', [], {'default': '0'})
-        },
-        'djangosampler.sample': {
-            'Meta': {'object_name': 'Sample'},
-            'cost': ('django.db.models.fields.FloatField', [], {}),
-            'duration': ('django.db.models.fields.FloatField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'params': ('django.db.models.fields.TextField', [], {}),
-            'query': ('django.db.models.fields.TextField', [], {}),
-            'stack': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djangosampler.Stack']"})
-        },
-        'djangosampler.stack': {
-            'Meta': {'object_name': 'Stack'},
-            'count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'hash': ('django.db.models.fields.CharField', [], {'max_length': '32', 'primary_key': 'True'}),
-            'query': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['djangosampler.Query']"}),
-            'stack': ('django.db.models.fields.TextField', [], {}),
-            'total_cost': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'total_duration': ('django.db.models.fields.FloatField', [], {'default': '0'})
-        }
-    }
-
-    complete_apps = ['djangosampler']
+    operations = [
+        migrations.CreateModel(
+            name='Query',
+            fields=[
+                ('hash', models.CharField(max_length=32, serialize=False, primary_key=True)),
+                ('query', models.TextField()),
+                ('total_duration', models.FloatField(default=0)),
+                ('total_cost', models.FloatField(default=0)),
+                ('count', models.IntegerField(default=0)),
+                ('query_type', models.CharField(max_length=32, db_index=True)),
+                ('created_dt', models.DateTimeField(default=datetime.datetime.now, editable=False, db_index=True)),
+            ],
+            options={
+                'verbose_name_plural': 'queries',
+            },
+        ),
+        migrations.CreateModel(
+            name='Sample',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('query', models.TextField()),
+                ('duration', models.FloatField()),
+                ('cost', models.FloatField()),
+                ('params', models.TextField()),
+                ('created_dt', models.DateTimeField(default=datetime.datetime.now, editable=False)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Stack',
+            fields=[
+                ('hash', models.CharField(max_length=32, serialize=False, primary_key=True)),
+                ('stack', models.TextField()),
+                ('total_duration', models.FloatField(default=0)),
+                ('total_cost', models.FloatField(default=0)),
+                ('count', models.IntegerField(default=0)),
+                ('created_dt', models.DateTimeField(default=datetime.datetime.now, editable=False)),
+                ('query', models.ForeignKey(to='djangosampler.Query')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='sample',
+            name='stack',
+            field=models.ForeignKey(to='djangosampler.Stack'),
+        ),
+    ]

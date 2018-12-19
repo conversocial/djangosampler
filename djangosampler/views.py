@@ -18,17 +18,20 @@ PAGE_SIZE = 20
 
 @staff_member_required
 def queries(request, query_type, date_string, offset=0, sort='total_duration'):
-    start_date = datetime.strptime(date_string, '%Y-%m-%d') 
+    start_date = datetime.strptime(date_string, '%Y-%m-%d')
     end_date = start_date + timedelta(days=1)
 
     start_offset = int(offset)
-    query_qs = Query.objects.filter(query_type=query_type,
-            created_dt__gte=start_date, created_dt__lt=end_date)
+    query_qs = Query.objects.filter(
+        query_type=query_type,
+        created_dt__gte=start_date,
+        created_dt__lt=end_date
+    )
 
     total_queries = query_qs.count()
     queries = query_qs.order_by(sort)
     queries = queries.reverse()
-    queries = queries[start_offset:start_offset+PAGE_SIZE]
+    queries = queries[start_offset:start_offset + PAGE_SIZE]
     queries = list(queries)
     end_offset = start_offset + len(queries)
 
@@ -40,7 +43,8 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
     pages = moves.range(
         max(1, current_page - 5), 1 + min(max_pages, current_page + 5))
 
-    pages = list([{
+    pages = list([
+        {
             'number': page,
             'url': reverse('queries', kwargs={
                 'date_string': date_string,
@@ -58,7 +62,7 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
         return reverse('queries', kwargs={
             'date_string': date_string,
             'query_type': query_type,
-            'offset': 0, 
+            'offset': 0,
             'sort': field
         })
 
@@ -69,23 +73,26 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
     query_types = _get_query_types(date_string)
     date_links = _get_date_links(start_date, query_type)
 
-    return render_to_response('djangosampler/queries.html', 
-            {
-                'by_count_url': by_count_url,
-                'by_duration_url': by_duration_url,
-                'by_cost_url': by_cost_url,
-                'query_types': query_types,
-                'start_offset': start_offset,
-                'end_offset': end_offset,
-                'total_queries': total_queries,
-                'pages': pages,
-                'current_page': current_page,
-                'queries': queries,
-                'date_links': date_links,
-                'current_date': date_string,
-                'current_query_type': query_type,
-            },
-            context_instance=RequestContext(request))
+    return render_to_response(
+        'djangosampler/queries.html',
+        {
+            'by_count_url': by_count_url,
+            'by_duration_url': by_duration_url,
+            'by_cost_url': by_cost_url,
+            'query_types': query_types,
+            'start_offset': start_offset,
+            'end_offset': end_offset,
+            'total_queries': total_queries,
+            'pages': pages,
+            'current_page': current_page,
+            'queries': queries,
+            'date_links': date_links,
+            'current_date': date_string,
+            'current_query_type': query_type,
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 @staff_member_required
 def query(request, query_hash):
@@ -112,19 +119,23 @@ def query(request, query_hash):
             recent_query = None
         recent_queries.append((recent_date, recent_query))
 
-
     date_string = query.created_dt.strftime('%Y-%m-%d')
-    back_link = reverse('queries',
+    back_link = reverse(
+        'queries',
         kwargs={
             'date_string': date_string,
-            'query_type': query.query_type, 
-            'sort': 'total_duration', 
+            'query_type': query.query_type,
+            'sort': 'total_duration',
             'offset': 0
-    })
+        }
+    )
 
-    return render_to_response('djangosampler/query.html', 
-            locals(),
-            context_instance=RequestContext(request))
+    return render_to_response(
+        'djangosampler/query.html',
+        locals(),
+        context_instance=RequestContext(request)
+    )
+
 
 @staff_member_required
 def index(request):
@@ -132,29 +143,34 @@ def index(request):
     query_types = _get_query_types(current_date)
     # don't fail if this is the first time things have been run
     query_type = query_types[0]['name'] if query_types else None
-    return HttpResponseRedirect(reverse('queries',
+    return HttpResponseRedirect(reverse(
+        'queries',
         kwargs={
             'date_string': current_date,
-            'query_type': query_type, 
-            'sort': 'total_duration', 
+            'query_type': query_type,
+            'sort': 'total_duration',
             'offset': 0
-    }))
+        }
+    ))
+
 
 def _get_query_types(date_string):
-
-    query_type_names = Query.objects.values_list('query_type', flat=True).distinct()
+    query_type_names = Query.objects.values_list(
+        'query_type', flat=True).distinct()
     query_objs = []
     for query_type in query_type_names:
         query_obj = {}
         query_obj['name'] = query_type
         query_obj['friendly_name'] = query_type.capitalize()
-        query_obj['url'] = reverse('queries',
+        query_obj['url'] = reverse(
+            'queries',
             kwargs={
                 'date_string': date_string,
                 'query_type': query_type,
-                'sort': 'total_duration', 
+                'sort': 'total_duration',
                 'offset': 0
-        })
+            }
+        )
         query_objs.append(query_obj)
     return query_objs
 
@@ -166,15 +182,15 @@ def _get_date_links(current_date, query_type):
         date_value = current_date + timedelta(days=day)
         date_link = {}
         date_link['friendly_name'] = date_value.strftime('%Y-%m-%d')
-        date_link['url'] = reverse('queries',
+        date_link['url'] = reverse(
+            'queries',
             kwargs={
                 'date_string': date_link['friendly_name'],
                 'query_type': query_type,
-                'sort': 'total_duration', 
+                'sort': 'total_duration',
                 'offset': 0
-        })
+            }
+        )
         date_links.append(date_link)
 
     return date_links
-
-

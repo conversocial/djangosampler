@@ -1,8 +1,9 @@
+{% load staticfiles %}
 <html>
     <head>
         <title>Django Sampler</title>
         <h1>Django Sampler</h1>
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}djangosampler/sampler.css" />
+        <link rel="stylesheet" type="text/css" href="{% static "djangosampler/sampler.css" %}" />
     </head>
     <body>
         <div class="menu">

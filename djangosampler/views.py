@@ -38,7 +38,7 @@ def queries(request, query_type, date_string, offset=0, sort='total_duration'):
     for query in queries:
         query.url = reverse('query', kwargs={'query_hash': query.hash})
 
-    current_page = 1 + start_offset / PAGE_SIZE
+    current_page = 1 + int(start_offset / PAGE_SIZE)
     max_pages = int(ceil(total_queries / float(PAGE_SIZE)))
     pages = moves.range(
         max(1, current_page - 5), 1 + min(max_pages, current_page + 5))

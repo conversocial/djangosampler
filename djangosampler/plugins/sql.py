@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import json
+from functools import wraps
 from time import time
 
 from django.db import connection
@@ -17,11 +18,12 @@ class Sql(object):
         from django.db.backends.base.base import BaseDatabaseWrapper
         old_cursor = BaseDatabaseWrapper.cursor
 
+        @wraps(BaseDatabaseWrapper.cursor)
         def cursor(self):
             new_cursor = old_cursor(self)
             return SamplingCursorWrapper(new_cursor, self)
 
-        setattr(BaseDatabaseWrapper.cursor.im_class, 'cursor', cursor)
+        BaseDatabaseWrapper.cursor = cursor
 
     @staticmethod
     def get_query_view_addons():
